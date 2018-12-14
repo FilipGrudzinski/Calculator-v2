@@ -24,7 +24,11 @@ class ViewController: UIViewController {
             }
             return number
         }
-        
+        set {
+            
+            displayLabel.text = String(newValue)
+            
+        }
     }
     
     @IBAction func calcButtonPressed(_ sender: UIButton) {
@@ -39,11 +43,11 @@ class ViewController: UIViewController {
             
             if calcMethod == "+/-" {
                 
-                displayLabel.text = String(displayValue * -1)
+                displayValue = displayValue * -1
                 
             } else if calcMethod == "%" {
                 
-                displayLabel.text = String(displayValue / 100)
+                displayValue = displayValue / 100
                 
             } else if calcMethod == "AC" {
                 
