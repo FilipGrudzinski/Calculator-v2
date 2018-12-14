@@ -9,38 +9,70 @@
 import Foundation
 
 
-class CalculationLogic {
+struct CalculationLogic {
     
-    var number: Double
+    private var number: Double?
     
-    init(number:Double) {
+    private var intermediateCalculation: (n1: Double, operation: String)?
+    
+    mutating func setNumber(_ number: Double) {
+        
         self.number = number
+        
     }
     
-    func calculate(symbol: String) -> Double? {
+    
+    mutating func calculate(symbol: String) -> Double? {
         
-        if symbol == "+/-" {
+        if let n = number {
             
-            return number * -1
+            if symbol == "+/-" {
+                
+                return n * -1
+                
+            } else if symbol == "%" {
+                
+                return n / 100
+                
+            } else if symbol == "AC" {
+                
+                return 0
+                
+            } else if symbol == "=" {
+                
+                return performTwoNumCalculation(n2: n)
+                
+            } else {
+                
+                intermediateCalculation = (n1: n, operation: symbol)
+                
+            }
             
-        } else if symbol == "%" {
+           
+        }
+        
+         return nil
+    }
+    
+    private func performTwoNumCalculation(n2: Double) -> Double? {
+        
+        if let n1 = intermediateCalculation?.n1 , let operation = intermediateCalculation?.operation {
             
-            return number / 100
-            
-        } else if symbol == "AC" {
-            
-            return 0
+            switch operation {
+            case "+":
+                return n1 + n2
+            case "-":
+                 return n1 - n2
+            case "×":
+                return n1 * n2
+            case "÷":
+                return n1 / n2
+            default:
+                fatalError()
+            }
             
         }
         return nil
-        
     }
-    
-    
-        
-    
-        
-    
-    
     
 }
