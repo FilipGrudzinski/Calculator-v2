@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var displayLabel: UILabel!
     
+    @IBOutlet weak var calcButs: UIStackView!
     
     private var isFinishedTypingNumber: Bool = true
     
@@ -28,50 +29,46 @@ class ViewController: UIViewController {
             
             displayLabel.text = String(newValue)
             
+            
         }
     }
     
     @IBAction func calcButtonPressed(_ sender: UIButton) {
         
         //What should happen when a non-number button is pressed
-    
+        
         isFinishedTypingNumber = true
         
         
-
         if let calcMethod = sender.currentTitle {
             
-            if calcMethod == "+/-" {
-                
-                displayValue = displayValue * -1
-                
-            } else if calcMethod == "%" {
-                
-                displayValue = displayValue / 100
-                
-            } else if calcMethod == "AC" {
-                
-                displayLabel.text = "0"
-                
+            let calculator = CalculationLogic(number: displayValue)
+            guard let result = calculator.calculate(symbol: calcMethod) else {
+                fatalError("Result of calc is nil")
             }
             
+            displayValue = result
+            
         }
-        
-        
+    
     }
-
+    
     
     @IBAction func numButtonPressed(_ sender: UIButton) {
         
         //What should happen when a number is entered into the keypad
         
-        
         if let numValue = sender.currentTitle {
             
             if isFinishedTypingNumber {
+                if numValue == "." {
+                    displayLabel.text = "0."
+                    isFinishedTypingNumber = false
+                } else {
+                    displayLabel.text = numValue
+                    isFinishedTypingNumber = false
+                }
                 
-                displayLabel.text = numValue
-                isFinishedTypingNumber = false
             } else {
                 
                 if numValue == "." {
@@ -79,9 +76,7 @@ class ViewController: UIViewController {
                     let isInt = floor(displayValue) == displayValue
                     if !isInt {
                         return
-
                     }
-                    
                     
                 }
                 displayLabel.text = displayLabel.text! + numValue
@@ -89,8 +84,8 @@ class ViewController: UIViewController {
             }
             
         }
-    
+        
     }
-
+    
 }
 
